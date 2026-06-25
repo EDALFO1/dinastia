@@ -18,6 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'rol'     => \App\Http\Middleware\CheckRol::class,
             'modulo'  => \App\Http\Middleware\CheckModulo::class,
             'empresa.api' => \App\Http\Middleware\SetEmpresaContext::class,
+            'validate-tenant-binding' => \App\Http\Middleware\ValidateMultiTenantBinding::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

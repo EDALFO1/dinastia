@@ -156,18 +156,18 @@ class ReciboApiTest extends TestCase
         $response = $this->putJson("/api/v1/recibos/{$recibo->id}", $data, $this->headers);
 
         $response->assertStatus(200);
-        $this->assertDatabaseHas('recibos', [
-            'id' => $recibo->id,
-            'fecha' => '2026-07-25',
-            'ibc' => 4000000,
-        ]);
+        // Verify the recibo was updated
+        $updated = Recibo::find($recibo->id);
+        $this->assertEquals('2026-07-25', $updated->fecha->format('Y-m-d'));
+        $this->assertEquals(4000000, $updated->ibc);
     }
 
     public function test_recibo_exportado_no_se_puede_modificar(): void
     {
+        $batch = \App\Models\ExportBatch::factory()->create(['empresa_id' => $this->empresa->id]);
         $recibo = Recibo::factory()->create([
             'empresa_id' => $this->empresa->id,
-            'export_batch_id' => 123,
+            'export_batch_id' => $batch->id,
         ]);
 
         $data = ['total' => 5000000];
@@ -189,9 +189,10 @@ class ReciboApiTest extends TestCase
 
     public function test_recibo_exportado_no_se_puede_eliminar(): void
     {
+        $batch = \App\Models\ExportBatch::factory()->create(['empresa_id' => $this->empresa->id]);
         $recibo = Recibo::factory()->create([
             'empresa_id' => $this->empresa->id,
-            'export_batch_id' => 123,
+            'export_batch_id' => $batch->id,
         ]);
 
         $response = $this->deleteJson("/api/v1/recibos/{$recibo->id}", [], $this->headers);

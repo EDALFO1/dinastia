@@ -89,4 +89,5 @@ class BaseModel extends Model
             ->where('empresa_id', $empresaId);
     }
 
+
 }

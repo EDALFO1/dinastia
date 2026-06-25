@@ -23,21 +23,24 @@ class EmpresaScope implements Scope
      */
     public function apply(Builder $builder, Model $model): void
     {
-        // Only apply filter if user is authenticated
-        if (!auth()->check()) {
-            return;
-        }
-
-        // Get empresa_id from API context or session (web)
+        // Get empresa_id from multiple sources in priority order
         $empresaId = null;
 
-        // API: check for current_empresa_id (set by SetEmpresaContext middleware)
-        $user = auth()->user();
-        if ($user && isset($user->current_empresa_id) && $user->current_empresa_id) {
-            $empresaId = $user->current_empresa_id;
+        // 1. API requests: check X-Empresa-ID header first (works even before middleware)
+        $request = request();
+        if ($request && $request->header('X-Empresa-ID')) {
+            $empresaId = (int) $request->header('X-Empresa-ID');
         }
 
-        // Web: fall back to session
+        // 2. API: check for current_empresa_id (set by SetEmpresaContext middleware)
+        if (!$empresaId && auth()->check()) {
+            $user = auth()->user();
+            if ($user && isset($user->current_empresa_id) && $user->current_empresa_id) {
+                $empresaId = $user->current_empresa_id;
+            }
+        }
+
+        // 3. Web: fall back to session
         if (!$empresaId) {
             $empresaId = session('empresa_id');
         }

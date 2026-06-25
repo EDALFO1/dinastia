@@ -20,7 +20,7 @@ Route::prefix('v1')->group(function () {
         Route::get('auth/empresas', [AuthApiController::class, 'empresas']);
 
         // Protected endpoints requiring empresa context
-        Route::middleware('empresa.api')->group(function () {
+        Route::middleware(['empresa.api', 'validate-tenant-binding'])->group(function () {
             // Afiliados
             Route::apiResource('afiliados', AfiliadoApiController::class);
             Route::get('afiliados/{afiliado}/recibos', [AfiliadoApiController::class, 'recibos']);

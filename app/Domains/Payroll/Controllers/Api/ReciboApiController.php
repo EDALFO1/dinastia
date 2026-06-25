@@ -8,6 +8,7 @@ use App\Models\Recibo;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 
 class ReciboApiController extends Controller
@@ -71,7 +72,7 @@ class ReciboApiController extends Controller
             ->setStatusCode(201);
     }
 
-    public function update(Request $request, Recibo $recibo): ReciboResource
+    public function update(Request $request, Recibo $recibo): JsonResponse|ReciboResource
     {
         if ($recibo->export_batch_id !== null) {
             return response()->json([
