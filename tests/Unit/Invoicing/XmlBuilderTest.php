@@ -10,6 +10,7 @@ class XmlBuilderTest extends TestCase
     public function test_crea_documento_xml_valido(): void
     {
         $builder = new XmlBuilder();
+        $builder->addCbcElement('UBLVersionID', '2.1');
 
         $xml = $builder->getXmlString();
 

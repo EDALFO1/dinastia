@@ -64,8 +64,11 @@ class InvoiceTest extends TestCase
 
     public function test_calculate_totals_suma_lineas_e_impuestos_correctamente(): void
     {
+        $sequence = \Database\Factories\InvoiceSequenceFactory::new()->create(['empresa_id' => $this->empresa->id]);
+
         $invoice = Invoice::factory()->create([
             'empresa_id' => $this->empresa->id,
+            'invoice_sequence_id' => $sequence->id,
             'subtotal' => 0,
             'descuento' => 0,
             'total_impuestos' => 0,
@@ -75,12 +78,17 @@ class InvoiceTest extends TestCase
         InvoiceLineItem::factory()->create([
             'invoice_id' => $invoice->id,
             'empresa_id' => $this->empresa->id,
+            'cantidad' => 1,
+            'valor_unitario' => 100.00,
+            'descuento' => 0,
             'valor_linea' => 100.00,
         ]);
 
         InvoiceTax::factory()->create([
             'invoice_id' => $invoice->id,
             'empresa_id' => $this->empresa->id,
+            'base' => 100.00,
+            'porcentaje' => 19.00,
             'valor' => 19.00,
         ]);
 

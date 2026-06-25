@@ -11,6 +11,11 @@ class InvoiceSequence extends BaseModel
 
     protected $table = 'invoice_sequences';
 
+    protected static function newFactory()
+    {
+        return \Database\Factories\InvoiceSequenceFactory::new();
+    }
+
     protected $fillable = [
         'empresa_id',
         'numero_resolucion',
@@ -30,7 +35,10 @@ class InvoiceSequence extends BaseModel
 
     public function getNextNumber(): int
     {
-        return $this->lockForUpdate()->increment('proximo_numero');
+        $this->lockForUpdate();
+        $this->increment('proximo_numero');
+        $this->refresh();
+        return $this->proximo_numero;
     }
 
     public function isActive(): bool

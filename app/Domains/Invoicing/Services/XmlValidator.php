@@ -98,9 +98,18 @@ class XmlValidator
 
     public function validateXmlWellFormed(string $xmlContent): bool
     {
+        $this->validationErrors = [];
+
         try {
             $dom = new DOMDocument();
             $dom->loadXML($xmlContent);
+
+            // Check if root element exists
+            if (!$dom->documentElement) {
+                $this->validationErrors[] = 'No document element found';
+                return false;
+            }
+
             return true;
         } catch (\Exception $e) {
             $this->validationErrors[] = 'Invalid XML: ' . $e->getMessage();

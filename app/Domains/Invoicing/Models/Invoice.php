@@ -12,6 +12,11 @@ class Invoice extends BaseModel
 
     protected $table = 'invoices';
 
+    protected static function newFactory()
+    {
+        return \Database\Factories\InvoiceFactory::new();
+    }
+
     protected $fillable = [
         'empresa_id',
         'numero',

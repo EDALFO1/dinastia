@@ -19,7 +19,7 @@ class InvoiceFactoriesTest extends TestCase
 
         $this->assertNotNull($sequence->id);
         $this->assertNotNull($sequence->empresa_id);
-        $this->assertGreater($sequence->rango_fin, $sequence->rango_inicio);
+        $this->assertGreaterThan($sequence->rango_inicio, $sequence->rango_fin);
         $this->assertGreaterThanOrEqual($sequence->proximo_numero, $sequence->rango_inicio);
     }
 

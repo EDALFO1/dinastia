@@ -34,7 +34,7 @@ class XmlValidatorTest extends TestCase
 
     public function test_rechaza_xml_malformado(): void
     {
-        $xml = '<?xml version="1.0"?><Invoice><ID>123</ID>';
+        $xml = '<Invoice><ID>123</ID></InvalidRoot>';
 
         $isValid = $this->validator->validateXmlWellFormed($xml);
         $this->assertFalse($isValid);
@@ -53,7 +53,7 @@ class XmlValidatorTest extends TestCase
 
     public function test_retorna_errores_validacion(): void
     {
-        $xml = '<InvalidXml>';
+        $xml = '<Invoice><ID>123</ID></InvalidRoot>';
 
         $this->validator->validateXmlWellFormed($xml);
         $errors = $this->validator->getValidationErrors();

@@ -35,8 +35,11 @@ class InvoiceValidatorTest extends TestCase
 
     public function test_validar_integridad_valida_sumas_correctas(): void
     {
+        $sequence = \Database\Factories\InvoiceSequenceFactory::new()->create(['empresa_id' => $this->empresa->id]);
+
         $invoice = Invoice::factory()->create([
             'empresa_id' => $this->empresa->id,
+            'invoice_sequence_id' => $sequence->id,
             'subtotal' => 100,
             'descuento' => 0,
             'total_impuestos' => 19,
@@ -46,12 +49,17 @@ class InvoiceValidatorTest extends TestCase
         InvoiceLineItem::factory()->create([
             'invoice_id' => $invoice->id,
             'empresa_id' => $this->empresa->id,
+            'cantidad' => 1,
+            'valor_unitario' => 100,
+            'descuento' => 0,
             'valor_linea' => 100,
         ]);
 
         InvoiceTax::factory()->create([
             'invoice_id' => $invoice->id,
             'empresa_id' => $this->empresa->id,
+            'base' => 100,
+            'porcentaje' => 19,
             'valor' => 19,
         ]);
 

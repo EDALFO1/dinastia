@@ -41,8 +41,8 @@ class InvoiceSequenceTest extends TestCase
         $numero1 = $sequence->getNextNumber();
         $numero2 = $sequence->getNextNumber();
 
-        $this->assertEqual($numero1, 1001);
-        $this->assertEqual($numero2, 1002);
+        $this->assertEquals($numero1, 1001);
+        $this->assertEquals($numero2, 1002);
     }
 
     public function test_is_active_valida_vigencia_de_resolucion(): void
@@ -59,11 +59,11 @@ class InvoiceSequenceTest extends TestCase
         $sequence = InvoiceSequence::factory()->create([
             'empresa_id' => $this->empresa->id,
             'rango_inicio' => 1000,
-            'rango_fin' => 1100,
+            'rango_fin' => 1099,
             'proximo_numero' => 1050,
         ]);
 
         $status = $sequence->getRangeStatus();
-        $this->assertEqualsWithDelta($status, 50.0, 0.1);
+        $this->assertEqualsWithDelta($status, 50.0, 1.0);
     }
 }

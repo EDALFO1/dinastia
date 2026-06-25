@@ -12,6 +12,11 @@ class InvoiceLineItem extends BaseModel
 
     protected $table = 'invoice_line_items';
 
+    protected static function newFactory()
+    {
+        return \Database\Factories\InvoiceLineItemFactory::new();
+    }
+
     protected $fillable = [
         'empresa_id',
         'invoice_id',
