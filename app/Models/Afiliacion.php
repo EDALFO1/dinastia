@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 namespace App\Models;
 
@@ -19,8 +19,8 @@ class Afiliacion extends BaseModel
 
         'nivel_arl',
 
-        'tipo_ibc',   // ✅ AGREGAR
-        'ibc',        // ✅ AGREGAR
+        'tipo_ibc',   // âœ… AGREGAR
+        'ibc',        // âœ… AGREGAR
 
         'fecha_afiliacion',
         'fecha_retiro',
@@ -48,7 +48,7 @@ class Afiliacion extends BaseModel
     {
         return $this->belongsTo(Caja::class);
     }
-    protected static function booted()
+    protected static function booted(): void
     {
         // Auto asignar empresa
         static::creating(function ($model) {
@@ -57,8 +57,6 @@ class Afiliacion extends BaseModel
             }
         });
 
-        // Global scope
-        static::addGlobalScope(new EmpresaScope);
     }
     public function arlAfiliado()
 {

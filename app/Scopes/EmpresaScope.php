@@ -6,16 +6,62 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
 
+/**
+ * Global scope for multi-tenant filtering by empresa_id
+ *
+ * Automatically filters all queries to only return records
+ * belonging to the current empresa from the session.
+ */
 class EmpresaScope implements Scope
 {
-    public function apply(Builder $builder, Model $model)
+    /**
+     * Apply the scope to a given Eloquent query builder
+     *
+     * @param Builder $builder
+     * @param Model $model
+     * @return void
+     */
+    public function apply(Builder $builder, Model $model): void
     {
-        if (!auth()->check()) return;
+        // Only apply filter if user is authenticated
+        if (!auth()->check()) {
+            return;
+        }
 
-        if (auth()->user()->role == 'admin') return;
+        // Skip filtering for admin users (if needed)
+        // Uncomment if admin should see all data across tenants
+        // if (auth()->user()->isAdmin()) {
+        //     return;
+        // }
 
-        if (session()->has('empresa_id')) {
-            $builder->where($model->getTable().'.empresa_id', session('empresa_id'));
+        // Apply the tenant filter
+        $empresaId = session('empresa_id');
+        if ($empresaId !== null) {
+            $table = $model->getTable();
+            $builder->where("{$table}.empresa_id", '=', $empresaId);
+        }
+    }
+
+    /**
+     * Remove the scope from a query builder
+     *
+     * @param Builder $builder
+     * @param Model $model
+     * @return void
+     */
+    public function remove(Builder $builder, Model $model): void
+    {
+        $column = "{$model->getTable()}.empresa_id";
+
+        $query = $builder->getQuery();
+
+        if ($query->wheres) {
+            foreach ($query->wheres as $key => $where) {
+                if (isset($where['column']) && $where['column'] === $column) {
+                    unset($query->wheres[$key]);
+                    $query->wheres = array_values($query->wheres);
+                }
+            }
         }
     }
 }

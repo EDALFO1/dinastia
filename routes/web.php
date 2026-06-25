@@ -3,37 +3,43 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
-use App\Http\Controllers\{
-    AuthController,
-    EmpresaLaboralController,
-    AfiliadoController,
+use App\Domains\Payroll\Controllers\{
     AfiliacionController,
+    AfiliadoController,
+    AfiliadoServicioController,
+    ArlAfiliadoController,
+    ExportBatchController,
+    IncapacidadController,
+    PeriodoAfiliadoController,
+    ReciboAfiliacionController,
     ReciboController,
     ReciboDetalleController,
-    ReciboAfiliacionController,
     RemisionController,
-    ExportBatchController,
-    EpsController,
-    ArlController,
-    PensionController,
-    CajaController,
-    AsesorController,
-    ServicioController,
-    EmpresaExternaController,
-    IncapacidadController,
-    NotaController,
-    UserController,
-    DocumentoController,
-    EmpresaController,
-    RolController,
-    SubtipoCotizanteController,
-    ParametroAnualController,
-    AfiliadoServicioController,
-    EmpresaClaveController,
     RemisionDetalleController,
-    ServicioExternoController,
+};
+
+use App\Domains\Shared\Controllers\{
+    ArlController,
+    AsesorController,
+    AuthController,
+    CajaController,
+    DocumentoController,
+    EmpresaClaveController,
+    EmpresaController,
+    EmpresaExternaController,
+    EmpresaLaboralController,
+    EpsController,
+    ModuloEmpresaController,
+    ModuloRolController,
+    NotaController,
+    ParametroAnualController,
+    PensionController,
     PlanController,
-    ArlAfiliadoController
+    RolController,
+    ServicioController,
+    ServicioExternoController,
+    SubtipoCotizanteController,
+    UserController,
 };
 
 /*
@@ -273,15 +279,15 @@ Route::middleware('auth')->group(function () {
     */
 
     Route::middleware('modulo:modulos_empresa')->group(function () {
-        Route::get('modulos-empresa',               [\App\Http\Controllers\ModuloEmpresaController::class, 'index'])->name('modulos-empresa.index');
-        Route::get('modulos-empresa/{empresa}/edit',[\App\Http\Controllers\ModuloEmpresaController::class, 'edit'])->name('modulos-empresa.edit');
-        Route::put('modulos-empresa/{empresa}',     [\App\Http\Controllers\ModuloEmpresaController::class, 'update'])->name('modulos-empresa.update');
+        Route::get('modulos-empresa',               [ModuloEmpresaController::class, 'index'])->name('modulos-empresa.index');
+        Route::get('modulos-empresa/{empresa}/edit',[ModuloEmpresaController::class, 'edit'])->name('modulos-empresa.edit');
+        Route::put('modulos-empresa/{empresa}',     [ModuloEmpresaController::class, 'update'])->name('modulos-empresa.update');
     });
 
     Route::middleware('modulo:modulos_rol')->group(function () {
-        Route::get('modulos-rol',               [\App\Http\Controllers\ModuloRolController::class, 'index'])->name('modulos-rol.index');
-        Route::get('modulos-rol/{rol}/edit',    [\App\Http\Controllers\ModuloRolController::class, 'edit'])->name('modulos-rol.edit');
-        Route::put('modulos-rol/{rol}',         [\App\Http\Controllers\ModuloRolController::class, 'update'])->name('modulos-rol.update');
+        Route::get('modulos-rol',               [ModuloRolController::class, 'index'])->name('modulos-rol.index');
+        Route::get('modulos-rol/{rol}/edit',    [ModuloRolController::class, 'edit'])->name('modulos-rol.edit');
+        Route::put('modulos-rol/{rol}',         [ModuloRolController::class, 'update'])->name('modulos-rol.update');
     });
 
 });

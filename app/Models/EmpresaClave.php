@@ -2,9 +2,7 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
-class EmpresaClave extends Model
+class EmpresaClave extends BaseModel
 {
     protected $table = 'empresa_claves';
 

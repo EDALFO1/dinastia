@@ -1,12 +1,13 @@
-<?php
+﻿<?php
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Scopes\EmpresaScope;
 
 class Recibo extends BaseModel
 {
+    use HasFactory;
     protected $table = 'recibos';
 
     protected $fillable = [
@@ -32,7 +33,7 @@ class Recibo extends BaseModel
 
         'export_batch_id'
     ];
-    protected static function booted()
+    protected static function booted(): void
     {
         // Auto asignar empresa
         static::creating(function ($model) {
@@ -41,8 +42,6 @@ class Recibo extends BaseModel
             }
         });
 
-        // Global scope
-        static::addGlobalScope(new EmpresaScope);
     }
 
     public function afiliado()

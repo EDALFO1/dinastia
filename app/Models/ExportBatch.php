@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 namespace App\Models;
 
@@ -19,7 +19,7 @@ public function recibos()
 {
     return $this->hasMany(Recibo::class, 'export_batch_id');
 }
-protected static function booted()
+protected static function booted(): void
     {
         // Auto asignar empresa
         static::creating(function ($model) {
@@ -28,7 +28,5 @@ protected static function booted()
             }
         });
 
-        // Global scope
-        static::addGlobalScope(new EmpresaScope);
     }
 }

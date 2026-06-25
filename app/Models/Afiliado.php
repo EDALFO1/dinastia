@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Scopes\EmpresaScope;
 
 class Afiliado extends BaseModel
 {
+    use HasFactory;
     protected $table = 'afiliados';
 
     protected $fillable = [
@@ -116,7 +117,7 @@ public function afiliacion()
 
     ];
 }
-protected static function booted()
+protected static function booted(): void
 {
     // Auto asignar empresa
     static::creating(function ($model) {
@@ -140,9 +141,6 @@ protected static function booted()
         }
 
     });
-
-    // Global scope
-    static::addGlobalScope(new EmpresaScope);
 }
 public function afiliaciones()
 {

@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 namespace App\Models;
 use App\Scopes\EmpresaScope;
@@ -17,7 +17,7 @@ class EmpresaLaboral extends BaseModel
     'direccion',
     'telefono',
     'contacto',
-    'email', // 🔥 AGREGADO
+    'email', // ðŸ”¥ AGREGADO
     'estado'
 ];
 
@@ -31,7 +31,7 @@ class EmpresaLaboral extends BaseModel
         return $this->belongsTo(Documento::class);
     }
 
-    protected static function booted()
+    protected static function booted(): void
     {
         // Auto asignar empresa
         static::creating(function ($model) {
@@ -40,7 +40,5 @@ class EmpresaLaboral extends BaseModel
             }
         });
 
-        // Global scope
-        static::addGlobalScope(new EmpresaScope);
     }
 }

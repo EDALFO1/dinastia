@@ -1,0 +1,139 @@
+@startuml Dinastía - Arquitectura Actual
+
+!define BGCOLOR #F5F5F5
+!define LAYER_COLOR #E8F4F8
+!define DOMAIN_COLOR #FFF4E6
+!define EXTERNAL_COLOR #FFE8E8
+
+skinparam backgroundColor BGCOLOR
+skinparam ArrowColor #333333
+skinparam ClassBackgroundColor LAYER_COLOR
+skinparam ClassBorderColor #333333
+
+package "🖥️ PRESENTACIÓN (Blade + Alpine.js + Tailwind)" #LAYER_COLOR {
+    component [Blade Templates] as BladeViews
+    component [Alpine.js] as Alpine
+    component [Tailwind CSS] as Tailwind
+}
+
+package "🛣️ ENRUTAMIENTO Y CONTROLADORES" #LAYER_COLOR {
+    component [routes/web.php] as WebRoutes
+    component [Middleware] as MiddlewareLayer
+
+    package "Controllers" #DOMAIN_COLOR {
+        component [ReciboController] as ReciboCtrl
+        component [AfiliadoController] as AfiliadoCtrl
+        component [RemisionController] as RemisionCtrl
+        component [EmpresaController] as EmpresaCtrl
+        component [...30+ Controllers] as MoreControllers
+    }
+}
+
+package "⚙️ SERVICIOS Y LÓGICA DE NEGOCIO" #LAYER_COLOR {
+    package "Services" {
+        component [LiquidacionService] as LiquidacionSvc
+        component [PilaValidator] as PilaValidatorSvc
+        component [ModuloService] as ModuloSvc
+    }
+
+    package "Actions (Phase 0)" {
+        component [CrearReciboAction] as CrearReciboAction
+        component [GenerarRemisionAction] as GenerarRemisionAction
+    }
+}
+
+package "💾 CAPA DE DATOS" #LAYER_COLOR {
+    package "Models (BaseModel + Multi-tenant)" {
+        component [Afiliado] as AfiliadoModel
+        component [Recibo] as ReciboModel
+        component [Remision] as RemisionModel
+        component [Empresa] as EmpresaModel
+        component [User] as UserModel
+        component [Modulo] as ModuloModel
+        component [Plan] as PlanModel
+        component [Incapacidad] as IncapacidadModel
+        component [ParametroAnual] as ParametroModel
+        component [...40+ Models] as MoreModels
+    }
+}
+
+package "🗄️ BASE DE DATOS" #EXTERNAL_COLOR {
+    database [MySQL 8.0] as MySQL {
+        entity "empresas" as empresas_table
+        entity "afiliados" as afiliados_table
+        entity "recibos" as recibos_table
+        entity "remisiones" as remisiones_table
+        entity "usuarios" as users_table
+        entity "...35+ tables" as more_tables
+    }
+}
+
+package "🔐 AUTENTICACIÓN Y AUTORIZACIÓN" #LAYER_COLOR {
+    component [Laravel Auth] as LaravelAuth
+    component [CheckRol Middleware] as CheckRolMW
+    component [CheckModulo Middleware] as CheckModuloMW
+    component [EmpresaScope (Multi-tenant)] as EmpresaScope
+}
+
+package "📤 INTEGRACIONES EXTERNAS" #EXTERNAL_COLOR {
+    component [DIAN Web Services] as DIANServices
+    component [Excel Import/Export] as ExcelIO
+    component [Google Drive API] as GoogleDrive
+}
+
+package "📊 FLUJOS PRINCIPALES" {
+    rectangle "FLUJO NÓMINA" {
+        component [1. Crear Afiliado] as Step1
+        component [2. Calcular Recibo] as Step2
+        component [3. Generar Remisión] as Step3
+        component [4. Exportar PILA/ARL] as Step4
+    }
+}
+
+package "⚙️ INFRAESTRUCTURA" #EXTERNAL_COLOR {
+    component [Redis Queue] as Queue
+    component [File Storage] as Storage
+    component [Session (Array/File)] as Session
+    component [Cache] as Cache
+}
+
+%% CONEXIONES - Capa de Presentación
+BladeViews --> WebRoutes: Render
+Alpine --> BladeViews: Interactividad
+Tailwind --> BladeViews: Estilos
+
+%% CONEXIONES - Enrutamiento
+WebRoutes --> MiddlewareLayer: Proteger rutas
+MiddlewareLayer --> CheckRolMW: Verificar rol
+MiddlewareLayer --> CheckModuloMW: Verificar módulo
+MiddlewareLayer --> EmpresaScope: Scoped by empresa_id
+
+%% CONEXIONES - Controllers a Services
+ReciboCtrl --> LiquidacionSvc: Calcular
+AfiliadoCtrl --> ModuloSvc: Acceso módulos
+RemisionCtrl --> PilaValidatorSvc: Validar
+
+%% CONEXIONES - Services a Models
+LiquidacionSvc --> AfiliadoModel: Obtener datos
+LiquidacionSvc --> ParametroModel: Porcentajes
+LiquidacionSvc --> ReciboModel: Crear/actualizar
+PilaValidatorSvc --> RemisionModel: Validar
+ModuloSvc --> ModuloModel: Consultar módulos
+
+%% CONEXIONES - Models a DB
+AfiliadoModel --> afiliados_table: ORM
+ReciboModel --> recibos_table: ORM
+RemisionModel --> remisiones_table: ORM
+EmpresaModel --> empresas_table: ORM
+
+%% CONEXIONES - External
+RemisionCtrl --> DIANServices: Enviar XML
+ExcelIO --> EmpresaCtrl: Importar/Exportar
+GoogleDrive --> AfiliadoModel: Almacenar archivos
+
+%% CONEXIONES - Infraestructura
+ReciboCtrl --> Queue: Jobs async
+RemisionCtrl --> Cache: Cache resultados
+MiddlewareLayer --> Session: Almacenar empresa_id
+
+@enduml

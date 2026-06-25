@@ -85,6 +85,5 @@ class ArlAfiliado extends BaseModel
             }
         });
 
-        static::addGlobalScope(new EmpresaScope);
     }
 }
