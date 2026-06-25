@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 
 class ReciboApiController extends Controller
 {
+    /** @OA\Get(path="/recibos", tags={"Recibos"}, summary="Listar recibos", security={{"sanctum":{}}}, @OA\Parameter(name="X-Empresa-ID", in="header", required=true, @OA\Schema(type="integer")), @OA\Parameter(name="afiliado_id", in="query", @OA\Schema(type="integer")), @OA\Response(response=200, description="Lista de recibos", @OA\JsonContent(@OA\Property(property="data", type="array", @OA\Items(ref="#/components/schemas/ReciboResource"))))) */
     public function index(Request $request): AnonymousResourceCollection
     {
         $recibos = Recibo::with('afiliado')
@@ -30,12 +31,14 @@ class ReciboApiController extends Controller
         return ReciboResource::collection($recibos);
     }
 
+    /** @OA\Get(path="/recibos/{id}", tags={"Recibos"}, summary="Obtener recibo", security={{"sanctum":{}}}, @OA\Parameter(name="X-Empresa-ID", in="header", required=true, @OA\Schema(type="integer")), @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")), @OA\Response(response=200, description="Detalle de recibo", @OA\JsonContent(ref="#/components/schemas/ReciboResource"))) */
     public function show(Recibo $recibo): ReciboResource
     {
         $recibo->load(['afiliado', 'detalles']);
         return new ReciboResource($recibo);
     }
 
+    /** @OA\Post(path="/recibos", tags={"Recibos"}, summary="Crear recibo", security={{"sanctum":{}}}, @OA\Parameter(name="X-Empresa-ID", in="header", required=true, @OA\Schema(type="integer")), @OA\RequestBody(required=true, @OA\JsonContent(required={"afiliado_id","fecha","dias_liquidar","ibc","total"})), @OA\Response(response=201, description="Recibo creado", @OA\JsonContent(ref="#/components/schemas/ReciboResource"))) */
     public function store(Request $request): JsonResponse
     {
         $empresaId = $request->user()->current_empresa_id;
@@ -72,6 +75,7 @@ class ReciboApiController extends Controller
             ->setStatusCode(201);
     }
 
+    /** @OA\Put(path="/recibos/{id}", tags={"Recibos"}, summary="Actualizar recibo", security={{"sanctum":{}}}, @OA\Parameter(name="X-Empresa-ID", in="header", required=true, @OA\Schema(type="integer")), @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")), @OA\Response(response=200, description="Recibo actualizado", @OA\JsonContent(ref="#/components/schemas/ReciboResource"))) */
     public function update(Request $request, Recibo $recibo): JsonResponse|ReciboResource
     {
         if ($recibo->export_batch_id !== null) {
@@ -101,6 +105,7 @@ class ReciboApiController extends Controller
         return new ReciboResource($recibo->fresh());
     }
 
+    /** @OA\Delete(path="/recibos/{id}", tags={"Recibos"}, summary="Eliminar recibo", security={{"sanctum":{}}}, @OA\Parameter(name="X-Empresa-ID", in="header", required=true, @OA\Schema(type="integer")), @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")), @OA\Response(response=200, description="Recibo eliminado")) */
     public function destroy(Recibo $recibo): \Illuminate\Http\JsonResponse
     {
         if ($recibo->export_batch_id !== null) {

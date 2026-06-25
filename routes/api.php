@@ -1,5 +1,21 @@
 <?php
 
+/**
+ * @OA\Info(
+ *     title="Dinastia ERP API",
+ *     version="1.0.0",
+ *     description="API REST para el sistema de gestión de nómina y recursos humanos Dinastia ERP",
+ *     @OA\Contact(email="soporte@dinastia.co")
+ * )
+ * @OA\SecurityScheme(
+ *     securityScheme="sanctum",
+ *     type="http",
+ *     scheme="bearer",
+ *     bearerFormat="token"
+ * )
+ * @OA\Server(url="/api/v1", description="API v1")
+ */
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Domains\Shared\Controllers\Api\AuthApiController;
