@@ -73,4 +73,40 @@ class Invoice extends BaseModel
         $this->total_impuestos = $this->taxes()->sum('valor');
         $this->total = $this->subtotal - $this->descuento + $this->total_impuestos;
     }
+
+    public function toXml(): string
+    {
+        $generator = new \App\Domains\Invoicing\Services\InvoiceXmlGenerator();
+        return $generator->generate($this);
+    }
+
+    public function toSignedXml(string $certificatePath, string $password = ''): string
+    {
+        $xmlContent = $this->toXml();
+        $signer = new \App\Domains\Invoicing\Services\XmlSigner();
+
+        try {
+            $signedXml = $signer->sign($xmlContent, $certificatePath, $password);
+            $this->update([
+                'xml_factura' => $signedXml,
+                'firma_digital' => $signer->getSignatureInfo($signedXml),
+            ]);
+            return $signedXml;
+        } catch (\Exception $e) {
+            throw new \Exception("Error al firmar factura: " . $e->getMessage());
+        }
+    }
+
+    public function getXmlStatus(): string
+    {
+        if (!$this->xml_factura) {
+            return 'pending';
+        }
+
+        if (!$this->firma_digital) {
+            return 'generated';
+        }
+
+        return 'signed';
+    }
 }
