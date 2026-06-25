@@ -28,14 +28,20 @@ class EmpresaScope implements Scope
             return;
         }
 
-        // Skip filtering for admin users (if needed)
-        // Uncomment if admin should see all data across tenants
-        // if (auth()->user()->isAdmin()) {
-        //     return;
-        // }
+        // Get empresa_id from API context or session (web)
+        $empresaId = null;
+
+        // API: check for current_empresa_id (set by SetEmpresaContext middleware)
+        if (auth()->user()->offsetExists('current_empresa_id')) {
+            $empresaId = auth()->user()->current_empresa_id;
+        }
+
+        // Web: fall back to session
+        if (!$empresaId) {
+            $empresaId = session('empresa_id');
+        }
 
         // Apply the tenant filter
-        $empresaId = session('empresa_id');
         if ($empresaId !== null) {
             $table = $model->getTable();
             $builder->where("{$table}.empresa_id", '=', $empresaId);
