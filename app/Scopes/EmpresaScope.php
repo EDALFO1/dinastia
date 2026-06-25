@@ -32,8 +32,9 @@ class EmpresaScope implements Scope
         $empresaId = null;
 
         // API: check for current_empresa_id (set by SetEmpresaContext middleware)
-        if (auth()->user()->offsetExists('current_empresa_id')) {
-            $empresaId = auth()->user()->current_empresa_id;
+        $user = auth()->user();
+        if ($user && isset($user->current_empresa_id) && $user->current_empresa_id) {
+            $empresaId = $user->current_empresa_id;
         }
 
         // Web: fall back to session
