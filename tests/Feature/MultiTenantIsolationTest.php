@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Afiliado;
 use App\Models\Empresa;
+use App\Models\Rol;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -11,6 +12,12 @@ use Tests\TestCase;
 class MultiTenantIsolationTest extends TestCase
 {
     use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        Rol::factory()->create(['id' => 1, 'nombre' => 'Admin']);
+    }
 
     /**
      * Verify that users from empresa A cannot see data from empresa B
@@ -22,11 +29,8 @@ class MultiTenantIsolationTest extends TestCase
         $empresa_b = Empresa::factory()->create(['nombre' => 'Empresa B']);
 
         // Create users for each company
-        $user_a = User::factory()->create(['email' => 'user_a@test.com']);
-        $user_b = User::factory()->create(['email' => 'user_b@test.com']);
-
-        $user_a->empresas()->attach($empresa_a);
-        $user_b->empresas()->attach($empresa_b);
+        $user_a = User::factory()->create(['empresa_id' => $empresa_a->id, 'email' => 'user_a@test.com']);
+        $user_b = User::factory()->create(['empresa_id' => $empresa_b->id, 'email' => 'user_b@test.com']);
 
         // Create afiliados for each company
         $afiliado_a = Afiliado::factory()->create([
@@ -39,7 +43,7 @@ class MultiTenantIsolationTest extends TestCase
             'nombre' => 'Afiliado de Empresa B'
         ]);
 
-        // Login as user_a and check access
+        // Login as user_a and set session
         session(['empresa_id' => $empresa_a->id]);
         $this->actingAs($user_a);
 

@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Empresa;
+use App\Models\Rol;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -24,11 +26,14 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
+            'empresa_id' => Empresa::factory(),
+            'rol_id' => 1, // Tests should seed roles first
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
+            'estado' => true,
         ];
     }
 

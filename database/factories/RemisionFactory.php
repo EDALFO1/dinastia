@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Afiliado;
 use App\Models\Empresa;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -19,10 +20,13 @@ class RemisionFactory extends Factory
     {
         return [
             'empresa_id' => Empresa::factory(),
-            'numero' => fake()->numerify('REM-######'),
+            'afiliado_id' => Afiliado::factory(),
+            'numero' => fake()->numberBetween(1000, 9999),
             'fecha' => fake()->date(),
-            'tipo' => fake()->randomElement(['PILA', 'ARL', 'EPS']),
-            'estado' => 'generada',
+            'mensajeria' => 0,
+            'intereses' => 0,
+            'dias_liquidar' => 30,
+            'observaciones' => fake()->sentence(),
         ];
     }
 }

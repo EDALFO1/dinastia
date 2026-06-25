@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\Afiliado;
 use App\Models\Empresa;
 use App\Models\Remision;
+use App\Models\Rol;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -19,9 +20,9 @@ class RemisionTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        Rol::factory()->create(['id' => 1, 'nombre' => 'Admin']);
         $this->empresa = Empresa::factory()->create();
-        $this->user = User::factory()->create();
-        $this->user->empresas()->attach($this->empresa);
+        $this->user = User::factory()->create(['empresa_id' => $this->empresa->id]);
     }
 
     /**

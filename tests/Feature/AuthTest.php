@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Empresa;
+use App\Models\Rol;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
@@ -12,6 +13,13 @@ class AuthTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+        // Create required roles
+        Rol::factory()->create(['id' => 1, 'nombre' => 'Admin']);
+    }
+
     /**
      * Test login with valid credentials
      */
@@ -19,10 +27,10 @@ class AuthTest extends TestCase
     {
         $empresa = Empresa::factory()->create();
         $user = User::factory()->create([
+            'empresa_id' => $empresa->id,
             'email' => 'test@example.com',
             'password' => Hash::make('password123'),
         ]);
-        $user->empresas()->attach($empresa);
 
         $response = $this->post('/logear', [
             'email' => 'test@example.com',

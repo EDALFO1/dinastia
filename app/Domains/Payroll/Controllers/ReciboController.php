@@ -11,18 +11,24 @@ use App\Models\Afiliacion;
 use App\Models\ParametroAnual;
 use App\Models\AfiliadoServicio;
 use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Exports\AfiliadosVigentesExport;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\PilaExcelExport;
 use App\Exports\PilaRealExport;
+use App\Services\LiquidacionService;
 
 
 class ReciboController extends Controller
 {
-    public function index()
-{
+    public function __construct(private LiquidacionService $liquidacion)
+    {
+    }
+    public function index(): View
+    {
     $empresaId = session('empresa_id');
 
     // ðŸ”¥ PERIODO ACTUAL
