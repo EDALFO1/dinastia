@@ -88,4 +88,5 @@ class BaseModel extends Model
         return static::withoutGlobalScope(EmpresaScope::class)
             ->where('empresa_id', $empresaId);
     }
+
 }

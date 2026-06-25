@@ -5,6 +5,7 @@ namespace App\Domains\Payroll\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ReciboResource;
 use App\Models\Recibo;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\DB;
@@ -34,7 +35,7 @@ class ReciboApiController extends Controller
         return new ReciboResource($recibo);
     }
 
-    public function store(Request $request): ReciboResource
+    public function store(Request $request): JsonResponse
     {
         $empresaId = $request->user()->current_empresa_id;
 
@@ -67,8 +68,7 @@ class ReciboApiController extends Controller
 
         return (new ReciboResource($recibo))
             ->response()
-            ->setStatusCode(201)
-            ->getData();
+            ->setStatusCode(201);
     }
 
     public function update(Request $request, Recibo $recibo): ReciboResource

@@ -33,8 +33,15 @@ class Recibo extends BaseModel
 
         'export_batch_id'
     ];
+
+    protected $casts = [
+        'fecha' => 'date',
+        'fecha_retiro' => 'date',
+    ];
     protected static function booted(): void
     {
+        parent::booted();
+
         // Auto asignar empresa
         static::creating(function ($model) {
             if (session()->has('empresa_id')) {

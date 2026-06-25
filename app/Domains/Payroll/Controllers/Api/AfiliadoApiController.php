@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\AfiliadoResource;
 use App\Http\Resources\ReciboResource;
 use App\Models\Afiliado;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Validation\Rule;
@@ -32,7 +33,7 @@ class AfiliadoApiController extends Controller
         return new AfiliadoResource($afiliado);
     }
 
-    public function store(Request $request): AfiliadoResource
+    public function store(Request $request): JsonResponse
     {
         $empresaId = $request->user()->current_empresa_id;
 
@@ -63,8 +64,7 @@ class AfiliadoApiController extends Controller
 
         return (new AfiliadoResource($afiliado))
             ->response()
-            ->setStatusCode(201)
-            ->getData();
+            ->setStatusCode(201);
     }
 
     public function update(Request $request, Afiliado $afiliado): AfiliadoResource

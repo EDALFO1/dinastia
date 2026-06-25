@@ -3,8 +3,11 @@
 namespace Tests\Feature\Api;
 
 use App\Models\Afiliado;
+use App\Models\Documento;
 use App\Models\Empresa;
+use App\Models\EmpresaLaboral;
 use App\Models\Rol;
+use App\Models\SubtipoCotizante;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -122,9 +125,16 @@ class AfiliadoApiTest extends TestCase
 
     public function test_store_crea_afiliado(): void
     {
+        $empresaLaboral = EmpresaLaboral::factory()->create(['empresa_id' => $this->empresa->id]);
+        $documento = Documento::factory()->create();
+        $subtipo = SubtipoCotizante::factory()->create();
+
         $data = Afiliado::factory()->make([
-            'empresa_id' => $this->empresa->id,
+            'empresa_laboral_id' => $empresaLaboral->id,
+            'documento_id' => $documento->id,
+            'subtipo_cotizante_id' => $subtipo->id,
         ])->toArray();
+        unset($data['empresa_id']);
 
         $response = $this->postJson('/api/v1/afiliados', $data, $this->headers);
 
@@ -137,9 +147,16 @@ class AfiliadoApiTest extends TestCase
 
     public function test_store_asigna_empresa_id_correctamente(): void
     {
+        $empresaLaboral = EmpresaLaboral::factory()->create(['empresa_id' => $this->empresa->id]);
+        $documento = Documento::factory()->create();
+        $subtipo = SubtipoCotizante::factory()->create();
+
         $data = Afiliado::factory()->make([
-            'empresa_id' => $this->empresa->id,
+            'empresa_laboral_id' => $empresaLaboral->id,
+            'documento_id' => $documento->id,
+            'subtipo_cotizante_id' => $subtipo->id,
         ])->toArray();
+        unset($data['empresa_id']);
 
         $response = $this->postJson('/api/v1/afiliados', $data, $this->headers);
 
@@ -151,9 +168,17 @@ class AfiliadoApiTest extends TestCase
     {
         $afiliado1 = Afiliado::factory()->create(['empresa_id' => $this->empresa->id]);
 
+        $empresaLaboral = EmpresaLaboral::factory()->create(['empresa_id' => $this->empresa->id]);
+        $documento = Documento::factory()->create();
+        $subtipo = SubtipoCotizante::factory()->create();
+
         $data = Afiliado::factory()->make([
             'numero_documento' => $afiliado1->numero_documento,
+            'empresa_laboral_id' => $empresaLaboral->id,
+            'documento_id' => $documento->id,
+            'subtipo_cotizante_id' => $subtipo->id,
         ])->toArray();
+        unset($data['empresa_id']);
 
         $response = $this->postJson('/api/v1/afiliados', $data, $this->headers);
 

@@ -22,5 +22,16 @@ class AppServiceProvider extends ServiceProvider
         Paginator::useBootstrap();
 
         View::composer(['shared.aside', 'shared.header'], SidebarComposer::class);
+
+        // Set up multi-tenant context for API requests from X-Empresa-ID header
+        // This allows model binding to work correctly before middleware runs
+        $this->app->make('router')->matched(function () {
+            if (auth()->check()) {
+                $empresaId = (int) request()->header('X-Empresa-ID');
+                if ($empresaId) {
+                    auth()->user()->current_empresa_id = $empresaId;
+                }
+            }
+        });
     }
 }

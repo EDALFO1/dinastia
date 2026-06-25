@@ -162,6 +162,7 @@ class RemisionApiTest extends TestCase
     {
         $remision = Remision::factory()->create(['empresa_id' => $this->empresa->id]);
         $remision->detalles()->create([
+            'empresa_id' => $this->empresa->id,
             'concepto' => 'PILA',
             'valor' => 100000,
         ]);

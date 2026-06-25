@@ -119,6 +119,8 @@ public function afiliacion()
 }
 protected static function booted(): void
 {
+    parent::booted();
+
     // Auto asignar empresa
     static::creating(function ($model) {
         if (session()->has('empresa_id')) {

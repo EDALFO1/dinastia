@@ -5,6 +5,7 @@ namespace App\Domains\Payroll\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\RemisionResource;
 use App\Models\Remision;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\DB;
@@ -28,7 +29,7 @@ class RemisionApiController extends Controller
         return new RemisionResource($remision);
     }
 
-    public function store(Request $request): RemisionResource
+    public function store(Request $request): JsonResponse
     {
         $empresaId = $request->user()->current_empresa_id;
 
@@ -54,8 +55,7 @@ class RemisionApiController extends Controller
 
         return (new RemisionResource($remision))
             ->response()
-            ->setStatusCode(201)
-            ->getData();
+            ->setStatusCode(201);
     }
 
     public function update(Request $request, Remision $remision): RemisionResource

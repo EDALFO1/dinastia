@@ -20,6 +20,10 @@ class Remision extends BaseModel
         'total'
     ];
 
+    protected $casts = [
+        'fecha' => 'date',
+    ];
+
     public function empresa()
     {
         return $this->belongsTo(Empresa::class);
