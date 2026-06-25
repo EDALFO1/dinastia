@@ -1,12 +1,13 @@
 <?php
 
 namespace App\Models;
-use App\Scopes\EmpresaScope;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class EmpresaLaboral extends BaseModel
 {
+    use HasFactory;
+
     protected $table = 'empresas_laborales';
 
     protected $fillable = [

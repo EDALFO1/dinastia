@@ -21,12 +21,12 @@ class RemisionFactory extends Factory
         return [
             'empresa_id' => Empresa::factory(),
             'afiliado_id' => Afiliado::factory(),
-            'numero' => fake()->numberBetween(1000, 9999),
+            'numero' => fake()->unique()->numberBetween(1, 99999),
             'fecha' => fake()->date(),
-            'mensajeria' => 0,
-            'intereses' => 0,
             'dias_liquidar' => 30,
-            'observaciones' => fake()->sentence(),
+            'mensajeria' => fake()->numberBetween(0, 50000),
+            'intereses' => fake()->numberBetween(0, 100000),
+            'total' => fake()->numberBetween(100000, 500000),
         ];
     }
 }

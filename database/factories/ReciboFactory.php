@@ -18,17 +18,29 @@ class ReciboFactory extends Factory
      */
     public function definition(): array
     {
+        $ibc = fake()->numberBetween(1000000, 5000000);
+        $eps = round($ibc * 0.04);
+        $arl = round($ibc * 0.01);
+        $pension = round($ibc * 0.16);
+        $caja = round($ibc * 0.04);
+        $admon = round($ibc * 0.04);
+
         return [
             'empresa_id' => Empresa::factory(),
             'afiliado_id' => Afiliado::factory(),
-            'numero' => fake()->numerify('REC-######'),
-            'periodo' => fake()->date('Y-m'),
-            'salario' => fake()->numberBetween(1000000, 5000000),
-            'salario_neto' => fake()->numberBetween(800000, 4000000),
-            'aporte_eps' => fake()->numberBetween(50000, 200000),
-            'aporte_arl' => fake()->numberBetween(30000, 100000),
-            'aporte_pension' => fake()->numberBetween(100000, 400000),
-            'estado' => 'generado',
+            'numero' => fake()->unique()->numberBetween(1, 99999),
+            'fecha' => fake()->date(),
+            'dias_liquidar' => 30,
+            'ibc' => $ibc,
+            'valor_eps' => $eps,
+            'valor_arl' => $arl,
+            'valor_pension' => $pension,
+            'valor_caja' => $caja,
+            'valor_admon' => $admon,
+            'valor_servicios' => 0,
+            'total' => $ibc - $eps - $arl - $pension - $caja - $admon,
+            'novedad' => null,
+            'fecha_retiro' => null,
         ];
     }
 }
