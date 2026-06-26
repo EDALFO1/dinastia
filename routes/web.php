@@ -51,8 +51,8 @@ use App\Domains\Shared\Controllers\{
 
 Route::get('/', fn() => redirect()->route('dashboard'));
 
-// Usar la vista de login anterior del sistema
-Route::view('/login', 'layouts.login')->name('login');
+// Login con la vista completa del sistema anterior
+Route::view('/login', 'modules.auth.login')->name('login');
 
 Route::post('/logear', [AuthController::class, 'logear'])->name('logear');
 
