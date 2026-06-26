@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\AuthWebController;
 
 use App\Domains\Payroll\Controllers\{
     AfiliacionController,
@@ -50,9 +52,9 @@ use App\Domains\Shared\Controllers\{
 
 Route::get('/', fn() => redirect()->route('dashboard'));
 
-Route::view('/login', 'modules.auth.login')->name('login');
+Route::get('/login', [AuthWebController::class, 'showLogin'])->name('login');
 
-Route::post('/logear', [AuthController::class, 'logear'])->name('logear');
+Route::post('/login', [AuthWebController::class, 'login']);
 
 Route::get('/force-logout', function (Illuminate\Http\Request $request) {
     Auth::logout();
@@ -76,8 +78,15 @@ Route::middleware('auth')->group(function () {
     |-----------------------------------
     */
 
-    Route::view('/dashboard', 'modules.dashboard.home')->name('dashboard');
-    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    // Nuevas rutas del panel de control
+    Route::get('/afiliados', [DashboardController::class, 'afiliados'])->name('afiliados.list');
+    Route::get('/recibos', [DashboardController::class, 'recibos'])->name('recibos.list');
+    Route::get('/invoices', [DashboardController::class, 'invoices'])->name('invoices.list');
+    Route::get('/journal-entries', [DashboardController::class, 'journalEntries'])->name('journal-entries.list');
+
+    Route::post('/logout', [AuthWebController::class, 'logout'])->name('logout');
     Route::get('seleccionar-empresa', [AuthController::class, 'seleccionarEmpresa'])->name('seleccionar.empresa');
     Route::post('cambiar-empresa', [AuthController::class, 'cambiarEmpresa'])->name('cambiar.empresa');
 
