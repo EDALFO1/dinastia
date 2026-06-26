@@ -34,6 +34,15 @@ use App\Domains\Shared\Controllers\AuditController;
 use App\Domains\Shared\Controllers\ProductionController;
 
 Route::prefix('v1')->group(function () {
+    // Public monitoring endpoints (no auth required)
+    Route::prefix('production')->group(function () {
+        Route::get('health', [ProductionController::class, 'healthCheck']);
+        Route::get('security-audit', [ProductionController::class, 'securityAudit']);
+        Route::get('permissions', [ProductionController::class, 'permissionMatrix']);
+        Route::get('deployment', [ProductionController::class, 'deploymentStatus']);
+        Route::get('dr-plan', [ProductionController::class, 'disasterRecoveryPlan']);
+    });
+
     // Public auth endpoints
     Route::post('auth/login', [AuthApiController::class, 'login']);
 
@@ -120,15 +129,10 @@ Route::prefix('v1')->group(function () {
                 Route::get('suspicious', [AuditController::class, 'suspicious']);
             });
 
-            // Production & Monitoring
+            // Production & Monitoring (authenticated endpoints)
             Route::prefix('production')->group(function () {
-                Route::get('health', [ProductionController::class, 'healthCheck']);
-                Route::get('security-audit', [ProductionController::class, 'securityAudit']);
-                Route::get('permissions', [ProductionController::class, 'permissionMatrix']);
-                Route::get('deployment', [ProductionController::class, 'deploymentStatus']);
                 Route::post('backup', [ProductionController::class, 'createBackup']);
                 Route::get('backups', [ProductionController::class, 'listBackups']);
-                Route::get('dr-plan', [ProductionController::class, 'disasterRecoveryPlan']);
             });
         });
     });
