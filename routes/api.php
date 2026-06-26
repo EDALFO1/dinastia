@@ -31,6 +31,7 @@ use App\Domains\Accounting\Controllers\FinancialReportController;
 use App\Domains\Accounting\Controllers\BankReconciliationController;
 use App\Domains\Accounting\Controllers\AdvancedReportController;
 use App\Domains\Shared\Controllers\AuditController;
+use App\Domains\Shared\Controllers\ProductionController;
 
 Route::prefix('v1')->group(function () {
     // Public auth endpoints
@@ -117,6 +118,17 @@ Route::prefix('v1')->group(function () {
                 Route::get('summary', [AuditController::class, 'summary']);
                 Route::post('integrity-certificate', [AuditController::class, 'integrityCertificate']);
                 Route::get('suspicious', [AuditController::class, 'suspicious']);
+            });
+
+            // Production & Monitoring
+            Route::prefix('production')->group(function () {
+                Route::get('health', [ProductionController::class, 'healthCheck']);
+                Route::get('security-audit', [ProductionController::class, 'securityAudit']);
+                Route::get('permissions', [ProductionController::class, 'permissionMatrix']);
+                Route::get('deployment', [ProductionController::class, 'deploymentStatus']);
+                Route::post('backup', [ProductionController::class, 'createBackup']);
+                Route::get('backups', [ProductionController::class, 'listBackups']);
+                Route::get('dr-plan', [ProductionController::class, 'disasterRecoveryPlan']);
             });
         });
     });
