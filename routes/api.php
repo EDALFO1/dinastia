@@ -28,6 +28,7 @@ use App\Domains\Invoicing\Controllers\Api\InvoiceApiController;
 use App\Domains\Invoicing\Controllers\Api\ReportApiController;
 use App\Domains\Accounting\Controllers\JournalEntryApiController;
 use App\Domains\Accounting\Controllers\FinancialReportController;
+use App\Domains\Accounting\Controllers\BankReconciliationController;
 
 Route::prefix('v1')->group(function () {
     // Public auth endpoints
@@ -82,6 +83,13 @@ Route::prefix('v1')->group(function () {
                     Route::get('income-statement', [FinancialReportController::class, 'incomeStatement']);
                     Route::get('income-comparison', [FinancialReportController::class, 'incomeComparison']);
                     Route::get('financial-ratios', [FinancialReportController::class, 'financialRatios']);
+                });
+
+                // Bank Reconciliation
+                Route::prefix('reconciliation')->group(function () {
+                    Route::get('validate-balance', [BankReconciliationController::class, 'validateBalance']);
+                    Route::get('report', [BankReconciliationController::class, 'report']);
+                    Route::get('duplicates', [BankReconciliationController::class, 'detectDuplicates']);
                 });
             });
 
