@@ -24,6 +24,7 @@ use App\Domains\Payroll\Controllers\Api\ReciboApiController;
 use App\Domains\Payroll\Controllers\Api\RemisionApiController;
 use App\Domains\Shared\Controllers\Api\EmpresaApiController;
 use App\Domains\Shared\Controllers\Api\UserApiController;
+use App\Domains\Invoicing\Controllers\Api\InvoiceApiController;
 
 Route::prefix('v1')->group(function () {
     // Public auth endpoints
@@ -46,6 +47,11 @@ Route::prefix('v1')->group(function () {
 
             // Remisiones
             Route::apiResource('remisiones', RemisionApiController::class);
+
+            // Invoices
+            Route::apiResource('invoices', InvoiceApiController::class);
+            Route::post('invoices/{invoice}/sign', [InvoiceApiController::class, 'sign']);
+            Route::post('invoices/{invoice}/send-to-dian', [InvoiceApiController::class, 'sendToDian']);
 
             // Empresa context
             Route::get('empresas/current', [EmpresaApiController::class, 'current']);
