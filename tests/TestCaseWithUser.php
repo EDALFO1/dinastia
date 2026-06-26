@@ -27,17 +27,32 @@ abstract class TestCaseWithUser extends TestCase
      */
     protected function setupUserWithEmpresa(): void
     {
-        // Create empresa first
-        $this->empresa = Empresa::factory()->create();
+        // Ensure roles table is seeded first
+        if (\App\Models\Rol::count() === 0) {
+            \App\Models\Rol::create([
+                'nombre' => 'Administrator',
+                'descripcion' => 'Administrator role',
+            ]);
+        }
 
-        // Create user with empresa_id (NOT using factory to avoid pivot issues)
+        // Create empresa first (directly, not through factory to ensure it exists)
+        $this->empresa = Empresa::create([
+            'nombre' => 'Test Company',
+            'nit' => '123456789-0',
+            'direccion' => '123 Test St',
+            'telefono' => '555-1234',
+            'email' => 'test@company.com',
+            'estado' => 1,
+        ]);
+
+        // Create user with empresa already established
         $this->user = User::create([
             'empresa_id' => $this->empresa->id,
             'rol_id' => 1,
             'name' => 'Test User',
             'email' => 'test@example.com',
             'password' => bcrypt('password'),
-            'estado' => 1,
+            'estado' => true,
         ]);
     }
 

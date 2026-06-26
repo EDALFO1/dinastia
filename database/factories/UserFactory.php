@@ -25,8 +25,11 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+        // Ensure empresa exists before creating user
+        $empresa = Empresa::first() ?? Empresa::factory()->create();
+
         return [
-            'empresa_id' => Empresa::factory(),
+            'empresa_id' => $empresa->id,
             'rol_id' => 1, // Tests should seed roles first
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
