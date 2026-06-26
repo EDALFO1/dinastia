@@ -100,22 +100,22 @@
                         <h5 class="card-title">Acciones Rápidas</h5>
                         <div class="row">
                             <div class="col-md-3 mb-2">
-                                <a href="/afiliados/create" class="btn btn-sm btn-primary w-100">
+                                <a href="{{ route('afiliados.create') }}" class="btn btn-sm btn-primary w-100">
                                     <i class="bi bi-plus"></i> Nuevo Empleado
                                 </a>
                             </div>
                             <div class="col-md-3 mb-2">
-                                <a href="/recibos/create" class="btn btn-sm btn-success w-100">
+                                <a href="{{ route('recibos.create') }}" class="btn btn-sm btn-success w-100">
                                     <i class="bi bi-plus"></i> Nuevo Recibo
                                 </a>
                             </div>
                             <div class="col-md-3 mb-2">
-                                <a href="/invoices/create" class="btn btn-sm btn-info w-100">
+                                <a href="{{ route('invoices.create') }}" class="btn btn-sm btn-info w-100">
                                     <i class="bi bi-plus"></i> Nueva Factura
                                 </a>
                             </div>
                             <div class="col-md-3 mb-2">
-                                <a href="/journal-entries/create" class="btn btn-sm btn-warning w-100">
+                                <a href="{{ route('journal-entries.create') }}" class="btn btn-sm btn-warning w-100">
                                     <i class="bi bi-plus"></i> Nuevo Asiento
                                 </a>
                             </div>

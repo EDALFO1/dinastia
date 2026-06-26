@@ -81,10 +81,18 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // Nuevas rutas del panel de control unificado
-    Route::get('/afiliados', [DashboardController::class, 'afiliados'])->name('afiliados.list');
-    Route::get('/recibos', [DashboardController::class, 'recibos'])->name('recibos.list');
-    Route::get('/invoices', [DashboardController::class, 'invoices'])->name('invoices.list');
-    Route::get('/journal-entries', [DashboardController::class, 'journalEntries'])->name('journal-entries.list');
+    Route::get('/afiliados-new', [DashboardController::class, 'afiliados'])->name('afiliados.list');
+    Route::get('/recibos-new', [DashboardController::class, 'recibos'])->name('recibos.list');
+    Route::get('/invoices-new', [DashboardController::class, 'invoices'])->name('invoices.list');
+    Route::get('/journal-entries-new', [DashboardController::class, 'journalEntries'])->name('journal-entries.list');
+
+    // Rutas para crear registros (redirigen a vistas de creación)
+    Route::get('/invoices/create', function () {
+        return view('invoices.create');
+    })->name('invoices.create');
+    Route::get('/journal-entries/create', function () {
+        return view('journal-entries.create');
+    })->name('journal-entries.create');
 
     // Autenticación con el AuthController anterior (completo)
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
