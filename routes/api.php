@@ -30,6 +30,7 @@ use App\Domains\Accounting\Controllers\JournalEntryApiController;
 use App\Domains\Accounting\Controllers\FinancialReportController;
 use App\Domains\Accounting\Controllers\BankReconciliationController;
 use App\Domains\Accounting\Controllers\AdvancedReportController;
+use App\Domains\Shared\Controllers\AuditController;
 
 Route::prefix('v1')->group(function () {
     // Public auth endpoints
@@ -108,6 +109,15 @@ Route::prefix('v1')->group(function () {
             // Empresa context
             Route::get('empresas/current', [EmpresaApiController::class, 'current']);
             Route::get('users/me', [UserApiController::class, 'me']);
+
+            // Audit Logs
+            Route::prefix('audit')->group(function () {
+                Route::get('logs', [AuditController::class, 'index']);
+                Route::get('model/{modelType}/{modelId}', [AuditController::class, 'modelAudit']);
+                Route::get('summary', [AuditController::class, 'summary']);
+                Route::post('integrity-certificate', [AuditController::class, 'integrityCertificate']);
+                Route::get('suspicious', [AuditController::class, 'suspicious']);
+            });
         });
     });
 });
