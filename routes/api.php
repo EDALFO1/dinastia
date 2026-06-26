@@ -27,6 +27,7 @@ use App\Domains\Shared\Controllers\Api\UserApiController;
 use App\Domains\Invoicing\Controllers\Api\InvoiceApiController;
 use App\Domains\Invoicing\Controllers\Api\ReportApiController;
 use App\Domains\Accounting\Controllers\JournalEntryApiController;
+use App\Domains\Accounting\Controllers\FinancialReportController;
 
 Route::prefix('v1')->group(function () {
     // Public auth endpoints
@@ -64,12 +65,24 @@ Route::prefix('v1')->group(function () {
                 Route::get('monthly-summary', [ReportApiController::class, 'monthlySummary']);
             });
 
-            // Accounting - Journal Entries
+            // Accounting - Journal Entries & Reports
             Route::prefix('accounting')->group(function () {
+                // Journal Entries
                 Route::apiResource('journal-entries', JournalEntryApiController::class);
                 Route::post('journal-entries/{id}/approve', [JournalEntryApiController::class, 'approve']);
                 Route::post('journal-entries/{id}/reject', [JournalEntryApiController::class, 'reject']);
                 Route::get('summary/balances', [JournalEntryApiController::class, 'balanceSummary']);
+
+                // Financial Reports
+                Route::prefix('reports')->group(function () {
+                    Route::get('ledger', [FinancialReportController::class, 'ledger']);
+                    Route::get('ledger-consolidated', [FinancialReportController::class, 'ledgerConsolidated']);
+                    Route::get('balance-sheet', [FinancialReportController::class, 'balanceSheet']);
+                    Route::get('balance-sheet-vertical', [FinancialReportController::class, 'balanceSheetVertical']);
+                    Route::get('income-statement', [FinancialReportController::class, 'incomeStatement']);
+                    Route::get('income-comparison', [FinancialReportController::class, 'incomeComparison']);
+                    Route::get('financial-ratios', [FinancialReportController::class, 'financialRatios']);
+                });
             });
 
             // Empresa context
