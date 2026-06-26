@@ -29,6 +29,7 @@ use App\Domains\Invoicing\Controllers\Api\ReportApiController;
 use App\Domains\Accounting\Controllers\JournalEntryApiController;
 use App\Domains\Accounting\Controllers\FinancialReportController;
 use App\Domains\Accounting\Controllers\BankReconciliationController;
+use App\Domains\Accounting\Controllers\AdvancedReportController;
 
 Route::prefix('v1')->group(function () {
     // Public auth endpoints
@@ -90,6 +91,17 @@ Route::prefix('v1')->group(function () {
                     Route::get('validate-balance', [BankReconciliationController::class, 'validateBalance']);
                     Route::get('report', [BankReconciliationController::class, 'report']);
                     Route::get('duplicates', [BankReconciliationController::class, 'detectDuplicates']);
+                });
+
+                // Advanced Reports
+                Route::prefix('advanced')->group(function () {
+                    Route::get('horizontal-analysis', [AdvancedReportController::class, 'horizontalAnalysis']);
+                    Route::get('trends', [AdvancedReportController::class, 'trends']);
+                    Route::post('budget-comparison', [AdvancedReportController::class, 'budgetComparison']);
+                    Route::get('audit-trail/{entryId}', [AdvancedReportController::class, 'entryAuditTrail']);
+                    Route::get('audit-by-user', [AdvancedReportController::class, 'auditByUser']);
+                    Route::get('audit-by-period', [AdvancedReportController::class, 'auditByPeriod']);
+                    Route::get('suspicious-activity', [AdvancedReportController::class, 'suspiciousActivity']);
                 });
             });
 
