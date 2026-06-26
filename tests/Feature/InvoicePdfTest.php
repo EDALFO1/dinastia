@@ -5,32 +5,15 @@ namespace Tests\Feature;
 use App\Domains\Invoicing\Models\Invoice;
 use App\Domains\Invoicing\Models\InvoiceSequence;
 use App\Domains\Invoicing\Services\InvoicePdfGenerator;
-use App\Models\Empresa;
-use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
+use Tests\TestCaseWithUser;
 
-class InvoicePdfTest extends TestCase
+class InvoicePdfTest extends TestCaseWithUser
 {
-    use RefreshDatabase;
-
-    protected User $user;
-    protected Empresa $empresa;
     protected Invoice $invoice;
 
     protected function setUp(): void
     {
         parent::setUp();
-
-        $this->empresa = Empresa::factory()->create();
-        $this->user = User::create([
-            'empresa_id' => $this->empresa->id,
-            'rol_id' => 1,
-            'name' => 'Test User',
-            'email' => 'test@test.com',
-            'password' => bcrypt('password'),
-            'estado' => 1,
-        ]);
 
         $sequence = InvoiceSequence::factory()->create([
             'empresa_id' => $this->empresa->id,

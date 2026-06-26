@@ -4,32 +4,14 @@ namespace Tests\Feature;
 
 use App\Domains\Invoicing\Models\Invoice;
 use App\Domains\Invoicing\Models\InvoiceSequence;
-use App\Models\Empresa;
-use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
+use Tests\TestCaseWithUser;
 
-class ReportApiTest extends TestCase
+class ReportApiTest extends TestCaseWithUser
 {
-    use RefreshDatabase;
-
-    protected User $user;
-    protected Empresa $empresa;
-
     protected function setUp(): void
     {
         parent::setUp();
-
-        $this->empresa = Empresa::factory()->create();
-        $this->user = User::create([
-            'empresa_id' => $this->empresa->id,
-            'rol_id' => 1,
-            'name' => 'Test User',
-            'email' => 'test@test.com',
-            'password' => bcrypt('password'),
-            'estado' => 1,
-        ]);
     }
 
     public function test_sales_book_summary()

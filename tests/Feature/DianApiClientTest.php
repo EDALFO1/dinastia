@@ -8,13 +8,11 @@ use App\Domains\Invoicing\Services\DianApiClient;
 use App\Models\Empresa;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Http;
-use Tests\TestCase;
+use Tests\TestCaseWithUser;
 
-class DianApiClientTest extends TestCase
+class DianApiClientTest extends TestCaseWithUser
 {
-    use RefreshDatabase;
     protected DianApiClient $client;
-    protected Empresa $empresa;
     protected InvoiceSequence $sequence;
 
     protected function setUp(): void

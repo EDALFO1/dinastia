@@ -8,32 +8,16 @@ use App\Domains\Invoicing\Models\InvoiceLineItem;
 use App\Domains\Invoicing\Models\InvoiceTax;
 use App\Models\Empresa;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Http;
-use Tests\TestCase;
+use Tests\TestCaseWithUser;
 
-class InvoiceApiTest extends TestCase
+class InvoiceApiTest extends TestCaseWithUser
 {
-    use RefreshDatabase;
-    protected User $user;
-    protected Empresa $empresa;
     protected InvoiceSequence $sequence;
 
     protected function setUp(): void
     {
         parent::setUp();
-
-        $this->empresa = Empresa::factory()->create();
-
-        // Create user with empresa_id
-        $this->user = User::create([
-            'empresa_id' => $this->empresa->id,
-            'rol_id' => 1,
-            'name' => 'Test User',
-            'email' => 'test@test.com',
-            'password' => bcrypt('password'),
-            'estado' => 1,
-        ]);
 
         $this->sequence = InvoiceSequence::factory()->create([
             'empresa_id' => $this->empresa->id,
