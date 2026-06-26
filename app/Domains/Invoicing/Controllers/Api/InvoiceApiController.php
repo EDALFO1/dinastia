@@ -161,6 +161,26 @@ class InvoiceApiController extends Controller
     }
 
     /**
+     * @OA\Get(
+     *     path="/v1/invoices/{id}/pdf",
+     *     summary="Descargar factura como PDF",
+     *     security={{"sanctum":{}}},
+     *     tags={"Invoices"},
+     *     @OA\Parameter(name="id", in="path", required=true),
+     *     @OA\Response(response=200, description="PDF descargado")
+     * )
+     */
+    public function downloadPdf(Invoice $invoice)
+    {
+        try {
+            $generator = new \App\Domains\Invoicing\Services\InvoicePdfGenerator($invoice);
+            return $generator->download();
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 422);
+        }
+    }
+
+    /**
      * @OA\Post(
      *     path="/v1/invoices/{id}/sign",
      *     summary="Firmar factura",

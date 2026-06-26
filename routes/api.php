@@ -25,6 +25,7 @@ use App\Domains\Payroll\Controllers\Api\RemisionApiController;
 use App\Domains\Shared\Controllers\Api\EmpresaApiController;
 use App\Domains\Shared\Controllers\Api\UserApiController;
 use App\Domains\Invoicing\Controllers\Api\InvoiceApiController;
+use App\Domains\Invoicing\Controllers\Api\ReportApiController;
 
 Route::prefix('v1')->group(function () {
     // Public auth endpoints
@@ -50,8 +51,17 @@ Route::prefix('v1')->group(function () {
 
             // Invoices
             Route::apiResource('invoices', InvoiceApiController::class);
+            Route::get('invoices/{invoice}/pdf', [InvoiceApiController::class, 'downloadPdf']);
             Route::post('invoices/{invoice}/sign', [InvoiceApiController::class, 'sign']);
             Route::post('invoices/{invoice}/send-to-dian', [InvoiceApiController::class, 'sendToDian']);
+
+            // Reports
+            Route::prefix('reports')->group(function () {
+                Route::get('sales-book', [ReportApiController::class, 'salesBook']);
+                Route::get('sales-book-summary', [ReportApiController::class, 'salesBookSummary']);
+                Route::get('invoice-audit-log', [ReportApiController::class, 'invoiceAuditLog']);
+                Route::get('monthly-summary', [ReportApiController::class, 'monthlySummary']);
+            });
 
             // Empresa context
             Route::get('empresas/current', [EmpresaApiController::class, 'current']);
