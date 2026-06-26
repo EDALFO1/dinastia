@@ -49,6 +49,11 @@ class ChartOfAccounts extends BaseModel
         'estado' => 'activo',
     ];
 
+    protected static function newFactory()
+    {
+        return \Database\Factories\ChartOfAccountsFactory::new();
+    }
+
     /**
      * Relación con padre (cuenta padre)
      */

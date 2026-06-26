@@ -36,6 +36,11 @@ class JournalEntry extends BaseModel
         'estado' => 'borrador',
     ];
 
+    protected static function newFactory()
+    {
+        return \Database\Factories\JournalEntryFactory::new();
+    }
+
     /**
      * Relación con líneas de asiento
      */

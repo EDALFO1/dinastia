@@ -26,6 +26,7 @@ use App\Domains\Shared\Controllers\Api\EmpresaApiController;
 use App\Domains\Shared\Controllers\Api\UserApiController;
 use App\Domains\Invoicing\Controllers\Api\InvoiceApiController;
 use App\Domains\Invoicing\Controllers\Api\ReportApiController;
+use App\Domains\Accounting\Controllers\JournalEntryApiController;
 
 Route::prefix('v1')->group(function () {
     // Public auth endpoints
@@ -61,6 +62,14 @@ Route::prefix('v1')->group(function () {
                 Route::get('sales-book-summary', [ReportApiController::class, 'salesBookSummary']);
                 Route::get('invoice-audit-log', [ReportApiController::class, 'invoiceAuditLog']);
                 Route::get('monthly-summary', [ReportApiController::class, 'monthlySummary']);
+            });
+
+            // Accounting - Journal Entries
+            Route::prefix('accounting')->group(function () {
+                Route::apiResource('journal-entries', JournalEntryApiController::class);
+                Route::post('journal-entries/{id}/approve', [JournalEntryApiController::class, 'approve']);
+                Route::post('journal-entries/{id}/reject', [JournalEntryApiController::class, 'reject']);
+                Route::get('summary/balances', [JournalEntryApiController::class, 'balanceSummary']);
             });
 
             // Empresa context

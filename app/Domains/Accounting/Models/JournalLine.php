@@ -27,6 +27,11 @@ class JournalLine extends BaseModel
         'valor' => 'decimal:2',
     ];
 
+    protected static function newFactory()
+    {
+        return \Database\Factories\JournalLineFactory::new();
+    }
+
     /**
      * Relación con asiento
      */
